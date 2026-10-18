@@ -39,24 +39,10 @@ jobs:
             "$WIND_WAKER_URL"
           ls -lh "test build.ciso"
           file "test build.ciso"
-background: 
-    - name: Debug downloaded file contents
+
+      - name: Debug downloaded file contents
         run: |
-        head -n 20 "$RUNNER_TEMP/wind-waker/test build.ciso"
-          
-          - name: Download Wind Waker disc image
-        env:
-          WIND_WAKER_URL: ${{ secrets.WIND_WAKER_URL }}
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/wind-waker"
-          cd "$RUNNER_TEMP/wind-waker"
-          curl -L --fail --retry 3 --retry-all-errors \
-            -A "Mozilla/5.0" \
-            -o "test build.ciso" \
-            "$WIND_WAKER_URL"
-          ls -lh "test build.ciso"
-          file "test build.ciso"
+          head -n 20 "$RUNNER_TEMP/wind-waker/test build.ciso"
 
       - name: Download Wiimms ISO Tools
         run: |
