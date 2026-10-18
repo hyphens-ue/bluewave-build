@@ -46,7 +46,7 @@ jobs:
           cd "$RUNNER_TEMP/wind-waker"
           curl -L --fail --retry 3 --retry-all-errors \
             -o wit.tar.gz \
-            "[https://wit.wiimm.de/download/wit-v3.05a-r8638-mac.tar.gz](https://wit.wiimm.de/download/wit-v3.05a-r8638-mac.tar.gz)"
+            "https://wit.wiimm.de/download/wit-v3.05a-r8638-mac.tar.gz"
           tar -xzf wit.tar.gz
           WIT_DIR="$(find . -maxdepth 1 -type d -name 'wit-*' -print -quit)"
           if [ -z "$WIT_DIR" ]; then
@@ -70,7 +70,7 @@ jobs:
           file WindWaker.iso
 
       - name: Upload ISO
-        if: inputs.iso_only
+        if: "inputs.iso_only"
         uses: actions/upload-artifact@v4
         with:
           name: WindWaker-ISO
@@ -80,11 +80,11 @@ jobs:
           retention-days: 1
 
       - name: Install build tools
-        if: !inputs.iso_only
+        if: "!inputs.iso_only"
         run: brew install cmake ninja || true
 
       - name: Restore build cache
-        if: !inputs.iso_only
+        if: "!inputs.iso_only"
         id: cache
         uses: actions/cache/restore@v4
         with:
@@ -94,7 +94,7 @@ jobs:
             bw-build-
 
       - name: Cache status
-        if: !inputs.iso_only
+        if: "!inputs.iso_only"
         run: |
           echo "Exact hit: ${{ steps.cache.outputs.cache-hit }}"
           echo "Matched key: '${{ steps.cache.outputs.cache-matched-key }}'"
@@ -105,21 +105,21 @@ jobs:
           fi
 
       - name: Clone BlueWake
-        if: !inputs.iso_only && steps.cache.outputs.cache-matched-key == ''
+        if: "!inputs.iso_only && steps.cache.outputs.cache-matched-key == ''"
         run: |
           set -euo pipefail
           git clone --depth 1 \
-            [https://github.com/chrissotraidis/bluewake.git](https://github.com/chrissotraidis/bluewake.git) \
+            https://github.com/chrissotraidis/bluewake.git \
             "$RUNNER_TEMP/bluewake"
 
       - name: Show BlueWake commit
-        if: !inputs.iso_only
+        if: "!inputs.iso_only"
         run: |
           cd "$RUNNER_TEMP/bluewake"
           git log -1 --format='%H %s'
 
       - name: Build IPA (with watchdog)
-        if: !inputs.iso_only
+        if: "!inputs.iso_only"
         id: build
         env:
           LIMIT_MIN: ${{ inputs.minutes }}
@@ -171,21 +171,21 @@ jobs:
           exit 0
 
       - name: Save build cache
-        if: always() && !inputs.iso_only
+        if: "always() && !inputs.iso_only"
         uses: actions/cache/save@v4
         with:
           path: ${{ runner.temp }}/bluewake
           key: bw-build-${{ github.run_id }}-${{ github.run_attempt }}
 
       - name: Check IPA
-        if: steps.build.outputs.done == 'true'
+        if: "steps.build.outputs.done == 'true'"
         run: |
           ls -lh "$RUNNER_TEMP/BlueWake.ipa"
           file "$RUNNER_TEMP/BlueWake.ipa"
           df -h /
 
       - name: Upload IPA
-        if: steps.build.outputs.done == 'true'
+        if: "steps.build.outputs.done == 'true'"
         uses: actions/upload-artifact@v4
         with:
           name: BlueWake-iOS
