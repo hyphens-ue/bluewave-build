@@ -46,7 +46,7 @@ jobs:
           cd "$RUNNER_TEMP/wind-waker"
           curl -L --fail --retry 3 --retry-all-errors \
             -o wit.tar.gz \
-            "https://wit.wiimm.de/download/wit-v3.05a-r8638-mac.tar.gz"
+            "[https://wit.wiimm.de/download/wit-v3.05a-r8638-mac.tar.gz](https://wit.wiimm.de/download/wit-v3.05a-r8638-mac.tar.gz)"
           tar -xzf wit.tar.gz
           WIT_DIR="$(find . -maxdepth 1 -type d -name 'wit-*' -print -quit)"
           if [ -z "$WIT_DIR" ]; then
@@ -109,7 +109,7 @@ jobs:
         run: |
           set -euo pipefail
           git clone --depth 1 \
-            https://github.com/chrissotraidis/bluewake.git \
+            [https://github.com/chrissotraidis/bluewake.git](https://github.com/chrissotraidis/bluewake.git) \
             "$RUNNER_TEMP/bluewake"
 
       - name: Show BlueWake commit
